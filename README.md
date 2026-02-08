@@ -1,4 +1,4 @@
-# FreeSliders(Non-Official)
+# FreeSliders(Non-Official + New feature)
 
 **Training-Free, Modality-Agnostic Concept Sliders for Fine-Grained Diffusion Control in Images, Audio, and Video**
 
@@ -114,8 +114,6 @@ FreeSliders/
 
 ### Generation (from paper)
 
-Random noise에서 시작하여 이미지/오디오/비디오를 생성합니다.
-
 ```bash
 # Image generation
 python test_pipelines.py --image --base "A photo of a person" \
@@ -130,26 +128,24 @@ python test_pipelines.py --audio --base "rain falling" \
 
 ### Condition Editing (custom - not in original paper)
 
-> `test_condition_pipelines.py`는 원래 논문에는 없는 기능으로, SDEdit 방식을 활용하여 별도로 추가한 스크립트입니다.
-> 기존 generate 플로우가 random noise에서 시작하는 것과 달리, **실제 입력(이미지/오디오/비디오)을 VAE로 인코딩한 뒤 noise를 추가**하여 concept slider로 편집합니다.
+> `test_condition_pipelines.py` is not present in original paper, I implement this using SDEdit method.
+> Unlike original paper, we can edit concept slider after adding noise on real input(Image,Video,Audio).
 
 ```
-[기존 Generate]  Random Noise → Denoise → Output
+[Original paper]  Random Noise → Denoise → Output
 [Condition Edit] Real Input → Encode → Add Noise → Denoise → Output
 ```
 
-`--noise_strength`로 편집 강도를 조절합니다:
-- `1.0` : 완전한 noise (기존 generate와 동일)
-- `0.5` : 원본 구조를 보존하면서 concept 적용
-- `0.3` : 원본을 거의 유지하며 약하게 편집
+`--noise_strength` : `1.0` : pure noise(same for original)
+
 
 ```bash
-# Image editing - 웃는 정도 조절
+# Image editing
 python test_condition_pipelines.py --image --input photo.jpg \
   --base "A photo of a person" --positive "A photo of a person smiling" \
   --negative "A photo of a person frowning" --scales -2 0 2 --noise_strength 0.5
 
-# Audio editing - 비 소리 강도 조절
+# Audio editing
 python test_condition_pipelines.py --audio --input rain.wav \
   --base "rain falling" --positive "heavy rain" --negative "light drizzle" \
   --scales -1 0 1 --noise_strength 0.4
