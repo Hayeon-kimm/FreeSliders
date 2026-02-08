@@ -1,4 +1,4 @@
-# FreeSliders
+# FreeSliders(Non-Official)
 
 **Training-Free, Modality-Agnostic Concept Sliders for Fine-Grained Diffusion Control in Images, Audio, and Video**
 
